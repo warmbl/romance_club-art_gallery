@@ -1,9 +1,10 @@
 let open = document.querySelector(".open-gallery");
 let close = document.querySelector(".close-gallery");
-let center_menu = document.querySelector(".center-menu");
 let back = document.querySelector("body");
 let blackout = document.querySelector(".blackout");
-let menu_item;
+let headline = document.querySelector(".headline");
+let parallax = document.querySelector(".back-parallax");
+let layer;
 let can_open = true;
 let cards;
 let addDiv;
@@ -18,59 +19,32 @@ const delayLoop = (fn, delay) => {
 };
 
 const appear = e => {
-    setTimeout(() => {
-        e.style.visibility = "visible";
-    }, 100);
-    e.style.animation = "appearance 0.3s linear 1";
+    headline.classList.add("headline-appearance");
+    e.classList.add("menu-appearance");
 };
 
 const disappear = e => {
-    e.style.visibility = "hidden";
-    setTimeout(() => {
-        e.style.animation = "disappearance 0.3s linear 1";
-    }, 300);
+    headline.classList.remove("headline-appearance");
+    e.classList.remove("menu-appearance");
 };
 
 function open_gall() {
     if (can_open) {
-        //
-        menu_item.forEach(delayLoop(appear, 100));
+        cards.forEach(delayLoop(appear, 100));
         blackout.style.opacity = "0.8";
-        //console.log(menu_item);
-        setTimeout(() => {
-            center_menu.style.visibility = "visible";
-        }, 400);
-
-        setTimeout(() => {
-            open.style.display = "none";
-            close.style.display = "inline";
-            can_open = false;
-        }, 700);
+        open.style.display = "none";
+        close.style.display = "inline";
+        can_open = false;
     } else return;
 }
 
-function close_gall(closeTime) {
+function close_gall() {
     if (!can_open) {
-        switch (closeTime) {
-            case "together":
-                setTimeout(() => {
-                    menu_item.forEach(delayLoop(disappear, 10));
-                    //menu_item.forEach(off);
-                }, 800);
-                break;
-            default:
-                menu_item.forEach(delayLoop(disappear, 50));
-                break;
-        }
-        setTimeout(() => {
-            center_menu.style.visibility = "hidden";
-        }, 500);
-        setTimeout(() => {
-            open.style.display = "inline";
-            close.style.display = "none";
-            blackout.style.opacity = "0";
-            can_open = true;
-        }, 200);
+        open.style.display = "inline";
+        close.style.display = "none";
+        cards.forEach(delayLoop(disappear, 0));
+        blackout.style.opacity = "0";
+        can_open = true;
     } else return;
 }
 
@@ -80,7 +54,11 @@ function addElement(e) {
     let maxValue = Math.max(back.clientWidth, back.clientHeight),
         sDiv = addDiv.style;
     back.appendChild(addDiv);
-    sDiv.width = sDiv.height = maxValue + "px";
+    sDiv.height = "100%";
+    sDiv.width = "100%";
+    sDiv.backgroundSize = "110vw auto";
+    sDiv.backgroundPosition = "center";
+
     sDiv.left = e.clientX - maxValue / 2 + "px";
     sDiv.top = e.clientY - maxValue / 2 + "px";
     let f = e.clientX + "px";
@@ -89,75 +67,88 @@ function addElement(e) {
     addDiv.classList.add("circle");
     addDiv.style.clipPath = "circle(1% at " + f + " " + s + ")";
     setTimeout(() => {
-        addDiv.style.clipPath = "circle(110% at " + f + " " + s + ")";
+        addDiv.style.clipPath = "circle(150% at " + f + " " + s + ")";
     }, 1);
 }
-function deleteElement() {
+
+function changeBackground(folder, count) {
+    addDiv.style.backgroundImage = `url(./images/${folder}.jpg)`;
+    setTimeout(() => {
+        parallax.innerHTML = "";
+        for (let i = 1; i <= count; i++) {
+            layer = document.createElement("img");
+            layer.classList.add("parallax");
+            layer.src = `./imagesHD/test${folder}/${i}.png`;
+            parallax.appendChild(layer);
+        }
+        close_gall();
+        //
+    }, 1000);
     setTimeout(() => {
         back.lastChild.remove();
-    }, 1400);
+    }, 2000);
 }
+/*
+function preloader() {
+    var preload = [
+        "./images/1.jpg",
+        "./images/2.jpg",
+        "./images/3.jpg",
+        "./images/4.jpg",
+        "./images/5.jpg",
+        "./images/6.jpg",
+    ];
+    var images = [];
+    for (var i = 0; i < preload.length; i++) {
+        images[i] = new Image();
+        images[i].src = preload[i];
+    }
+    alert("Изображения загружены");
+}
+*/
 
-function load() {
-    menu_item = center_menu.querySelectorAll(".slider-item");
+async function load() {
+    //preloader();
+    // Изначально загружается первый арт (test1)
+    for (let i = 1; i <= 4; i++) {
+        layer = document.createElement("img");
+        layer.classList.add("parallax");
+        layer.src = `./imagesHD/test1/${i}.png`;
+        parallax.appendChild(layer);
+    }
+
     cards = document.querySelectorAll(".card");
     cards.forEach(crd => {
         crd.addEventListener("click", addElement);
         crd.addEventListener("click", function inf() {
-            //console.log("Вы выбрали карточку: №", crd.id);
             let id_back = crd.id;
             switch (id_back) {
                 case "1":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 4);
                     break;
                 case "2":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 4);
                     break;
                 case "3":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 5);
                     break;
                 case "4":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 3);
                     break;
                 case "5":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 4);
                     break;
                 case "6":
-                    deleteElement();
-                    addDiv.style.backgroundImage = `url(./images/${id_back}.jpg)`;
-                    setTimeout(() => {
-                        back.style.backgroundImage = `url(./imagesHD/${id_back}.jpg)`;
-                    }, 1000);
+                    changeBackground(id_back, 5);
                     break;
                 default:
-                    back.style.backgroundImage = `url(./imagesHD/1.jpg)`;
+                    back.style.backgroundColor = "red";
                     break;
             }
-            close_gall("together");
         });
     });
     open.addEventListener("click", open_gall);
     close.addEventListener("click", close_gall);
 }
 
-window.addEventListener("load", load);
+window.onload = load;

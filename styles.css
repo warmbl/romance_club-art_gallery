@@ -3,7 +3,7 @@
     margin: 0;
 }
 html {
-    height: 100vw;
+    height: 100vh;
     width: 100vw;
     overflow: hidden;
     background-color: black;
@@ -11,18 +11,31 @@ html {
 body {
     height: 100%;
     width: 100%;
-    background-size: 100vw;
-    background-repeat: no-repeat;
-    background-image: url(./imagesHD/1.jpg);
-    transition: 0.3s;
 }
+.back-parallax{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.parallax{
+    position: absolute; /* чтобы png наслаивались друг на друга*/
+    height: auto;
+    width: 110vw;
+    
+    transition: 0s;
+}
+
 .blackout {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: black;
     opacity: 0;
-    transition: 1s;
+    transition: opacity 1s;
 }
 .icons {
     width: 60%;
@@ -75,67 +88,14 @@ footer {
     width: 100%;
     height: 80%;
     margin-top: 5%;
-    visibility: hidden;
-}
-
-@keyframes down {
-    0% {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(0, 400px);
-        opacity: 0;
-    }
-}
-
-@keyframes up {
-    0% {
-        transform: translate(0, 400px);
-        opacity: 0;
-    }
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-}
-
-@keyframes appearance {
-    0% {
-        transform: translate(0, 600px);
-        opacity: 0;
-    }
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-}
-
-@keyframes disappearance {
-    0% {
-        transform: translate(0, 0);
-    }
-    100% {
-        transform: translate(0, 400px);
-    }
-}
-
-@keyframes neww {
-    0% {
-        width: 1%;
-        height: 1%;
-        background-size: 100vw;
-    }
-    100% {
-        width: 100%;
-        height: 100%;
-        background-size: 100vw;
-    }
 }
 
 .headline {
     margin-left: 5%;
     margin-bottom: 2%;
+
+    transition: 1s;
+    transform: translateX(-200%);
 }
 
 h1 {
@@ -144,13 +104,6 @@ h1 {
     margin-left: 10%;
     margin-right: 10%;
     font-family: "Roboto", sans-serif;
-}
-
-
-.parallax {
-    position: absolute;
-    width: 100%;
-    height: 100%;
 }
 
 .open-gallery {
@@ -165,7 +118,15 @@ h1 {
     width: 90%;
     border-radius: 10px;
     overflow: hidden; /* чтобы работал border-radius*/
-    transition: 0.5s;
+    transition: 0.8s;
+
+    transform: translateY(120%);
+}
+.menu-appearance {
+    transform: translateY(0%);
+}
+.headline-appearance {
+    transform: translateX(0%);
 }
 .card:hover {
     height: 84%;
@@ -190,6 +151,7 @@ h1 {
     width: 100%;
     height: 100%;
     background-size: cover;
+    background-position: center;
 }
 .art-name {
     height: 30%;
@@ -200,7 +162,7 @@ h1 {
 }
 
 .circle {
-    position:static;
+    position: static;
     background-size: 100vw;
     background-repeat: no-repeat;
     transition: 1.5s;
